@@ -1,0 +1,12 @@
+POST http://localhost:3001/api/beers/
+Content-Type: application/json
+
+{
+	"name": "testbeername",
+	"brewery": "testbrewery",
+	"style": "IPA",
+	"abv": "6.0",
+	"ibu": "40",
+	"color": "clear yellow",
+	"producedNow": true
+}

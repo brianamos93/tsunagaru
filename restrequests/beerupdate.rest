@@ -1,0 +1,12 @@
+PUT http://localhost:3001/api/beers/634ea0d14208a243070cf325/
+Content-Type: application/json
+
+{
+	"name": "testbeername",
+	"brewery": "testbrewery",
+	"style": "IPA",
+	"abv": "6.0",
+	"ibu": "40",
+	"color": "clear yellow",
+	"producedNow": false
+}
