@@ -21,6 +21,10 @@ const beerSchema = new mongoose.Schema({
 	producedNow: {
 		type: Boolean,
 		required: true
+	},
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
 	}
 }, {
 	timestamps: true

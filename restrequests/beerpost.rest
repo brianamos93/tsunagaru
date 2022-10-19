@@ -8,5 +8,6 @@ Content-Type: application/json
 	"abv": "6.0",
 	"ibu": "40",
 	"color": "clear yellow",
-	"producedNow": true
+	"producedNow": true,
+	"userId": "634ffae92baca8c6904d31be"
 }

@@ -1,5 +1,6 @@
 const beersRouter = require('express').Router()
 const Beer = require('../models/beer')
+const User = require('../models/user')
 
 beersRouter.get('/', async (req, res) => {
 	const beers = await Beer.find({})
@@ -18,6 +19,8 @@ beersRouter.get('/:id', async (req, res) => {
 beersRouter.post('/', async (req, res) => {
 	const body = req.body
 
+	const user = await User.findById(body.userId)
+
 	const beer = new Beer({
 		name: body.name,
 		brewery: body.brewery,
@@ -25,11 +28,15 @@ beersRouter.post('/', async (req, res) => {
 		abv: body.abv,
 		ibu: body.ibu,
 		color: body.color,
-		producedNow: body.producedNow || true
+		producedNow: body.producedNow || true,
+		user: user._id
 	})
 
 	const savedBeer = await beer.save()
-	res.status(201).json(savedBeer)
+	user.beers = user.beers.concat(savedBeer._id)
+	await user.save()
+
+	res.json(savedBeer)
 
 })
 
