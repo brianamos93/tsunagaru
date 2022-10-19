@@ -6,19 +6,16 @@ beersRouter.get('/', async (req, res) => {
 	res.json(beers)
 })
 
-beersRouter.get('/:id', (req, res, next) => {
-	Beer.findById(req.params.id)
-		.then(beer => {
-			if (beer) {
-				res.json(beer)
-			} else {
-				res.status.apply(404).end()
-			}
-		})
-		.catch(error => next(error))
+beersRouter.get('/:id', async (req, res) => {
+	const beer = await Beer.findById(req.params.id)
+	if (beer) {
+		res.json(beer)
+	} else {
+		res.status(404).end()
+	}
 })
 
-beersRouter.post('/', (req, res, next) => {
+beersRouter.post('/', async (req, res) => {
 	const body = req.body
 
 	const beer = new Beer({
@@ -31,19 +28,14 @@ beersRouter.post('/', (req, res, next) => {
 		producedNow: body.producedNow || true
 	})
 
-	beer.save()
-		.then(savedBeer => {
-			res.status(201).json(savedBeer)
-		})
-		.catch(error => next(error))
+	const savedBeer = await beer.save()
+	res.status(201).json(savedBeer)
+
 })
 
-beersRouter.delete('/:id', (req, res, next) => {
-	Beer.findByIdAndRemove(req.params.id)
-		.then(() => {
-			res.status(204).end()
-		})
-		.catch(error => next(error))
+beersRouter.delete('/:id', async (req, res) => {
+	await Beer.findByIdAndRemove(req.params.id)
+	res.status(204).end()
 })
 
 beersRouter.put('/:id', (req, res, next) => {

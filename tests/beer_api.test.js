@@ -9,11 +9,10 @@ const Beer = require('../models/beer')
 beforeEach(async () => {
 	await Beer.deleteMany({})
 
-	let beerObject = new Beer(helper.initialBeers[0])
-	await beerObject.save()
-
-	beerObject = new Beer(helper.initialBeers[1])
-	await beerObject.save()
+	const beerObject = helper.initialBeers
+		.map(beer => new Beer(beer))
+	const promiseArray = beerObject.map(beer => beer.save())
+	await Promise.all(promiseArray)
 })
 
 test('beers are returned as json', async () => {
@@ -86,6 +85,38 @@ test('beer without required data is not added', async () => {
 	const beersAtEnd = await helper.beersInDb()
 
 	expect(beersAtEnd).toHaveLength(helper.initialBeers.length)
+})
+
+test('a specific note can be viewed', async () => {
+	const beersAtStart = await helper.beersInDb()
+
+	const beerToView = beersAtStart[0]
+
+	const resultBeer = await api
+		.get(`/api/beers/${beerToView.id}`)
+		.expect(200)
+		.expect('Content-Type', /application\/json/)
+
+	const processedBeerToView = JSON.parse(JSON.stringify(beerToView))
+	expect(resultBeer.body).toEqual(processedBeerToView)
+})
+
+test('a beer can be deleted', async () => {
+	const beersAtStart = await helper.beersInDb()
+	const beerToDelete = beersAtStart[0]
+
+	await api
+		.delete(`/api/beers/${beerToDelete.id}`)
+		.expect(204)
+
+	const beersAtEnd = await helper.beersInDb()
+
+	expect(beersAtEnd).toHaveLength(
+		helper.initialBeers.length - 1
+	)
+	const beername = beersAtEnd.map(r => r.name)
+
+	expect(beername).not.toContain(beerToDelete.name)
 })
 
 afterAll(() => {
