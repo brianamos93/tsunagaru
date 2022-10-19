@@ -1,10 +1,9 @@
 const beersRouter = require('express').Router()
 const Beer = require('../models/beer')
 
-beersRouter.get('/', (req, res) => {
-	Beer.find({}).then(beers => {
-		res.json(beers)
-	})
+beersRouter.get('/', async (req, res) => {
+	const beers = await Beer.find({})
+	res.json(beers)
 })
 
 beersRouter.get('/:id', (req, res, next) => {
@@ -34,7 +33,7 @@ beersRouter.post('/', (req, res, next) => {
 
 	beer.save()
 		.then(savedBeer => {
-			res.json(savedBeer)
+			res.status(201).json(savedBeer)
 		})
 		.catch(error => next(error))
 })
