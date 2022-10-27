@@ -55,8 +55,23 @@ beersRouter.post('/', async (req, res) => {
 })
 
 beersRouter.delete('/:id', async (req, res) => {
-	await Beer.findByIdAndRemove(req.params.id)
-	res.status(204).end()
+	const token = getTokenFrom(req)
+	const decodedToken = jwt.verify(token, process.env.SECRET)
+	const beersearch = await Beer.findById(req.params.id, { _id: 0, user: 1 }).exec()
+	console.log(beersearch)
+	const beeruserid = beersearch.user.toString()
+	console.log(beeruserid)
+	const userid = decodedToken.id
+	if (beeruserid === userid) {
+		await Beer.findByIdAndRemove(req.params.id)
+		res.status(204).end()
+	} else if (!decodedToken.id) {
+		return res.status(401).json({ error: 'token missing or invalid' })
+	} else if (beersearch.user === null) {
+		return res.status(401).json({ error: 'Beer does not exist.' })
+	} else {
+		return res.status(401).json({ error: 'Error' })
+	}
 })
 
 beersRouter.put('/:id', (req, res, next) => {

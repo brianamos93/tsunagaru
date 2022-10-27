@@ -1,0 +1,13 @@
+POST http://localhost:3001/api/beers
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3Q1IiwiaWQiOiI2MzRmZmFlOTJiYWNhOGM2OTA0ZDMxYmUiLCJpYXQiOjE2NjY4NzE5MzcsImV4cCI6MTY2Njg3NTUzN30.MKw5jZOVYuY4fHQkzIqKvDlftuyrYzwaWL097YRbH8Y
+
+{
+	"name": "testbeername5",
+	"brewery": "testbrewery5",
+	"style": "IPL",
+	"abv": "7.0",
+	"ibu": "65",
+	"color": "clear yellow",
+	"producedNow": true
+}
