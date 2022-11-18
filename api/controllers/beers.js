@@ -58,9 +58,7 @@ beersRouter.delete('/:id', async (req, res) => {
 	const token = getTokenFrom(req)
 	const decodedToken = jwt.verify(token, process.env.SECRET)
 	const beersearch = await Beer.findById(req.params.id, { _id: 0, user: 1 }).exec()
-	console.log(beersearch)
 	const beeruserid = beersearch.user.toString()
-	console.log(beeruserid)
 	const userid = decodedToken.id
 	if (beeruserid === userid) {
 		await Beer.findByIdAndRemove(req.params.id)

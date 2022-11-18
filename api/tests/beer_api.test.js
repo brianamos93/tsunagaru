@@ -24,13 +24,6 @@ test('beers are returned as json', async () => {
 		.expect('Content-Type', /application\/json/)
 })
 
-test('beers are returned as json', async () => {
-	await api
-		.get('/api/beers')
-		.expect(200)
-		.expect('Content-Type', /application\/json/)
-})
-
 test('all beers are returned', async () => {
 	const res = await api.get('/api/beers')
 
